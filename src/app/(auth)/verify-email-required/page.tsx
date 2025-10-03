@@ -6,8 +6,8 @@ import { Mail, Loader2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { authAPI } from "@/lib/api/auth";
-import { useAuthStore } from "@/lib/store/auth";
+import { authAPI } from "@/lib/api/auth.api";
+import { useAuthStore } from "@/lib/store/auth.store";
 
 export default function VerifyEmailRequiredPage() {
   const router = useRouter();

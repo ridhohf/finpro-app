@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authAPI } from "@/lib/api/auth";
+import { authAPI } from "@/lib/api/auth.api";
 import {
   CheckCircle2,
   Eye,
