@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { authAPI } from "@/lib/api/auth";
+import { authAPI } from "@/lib/api/auth.api";
 
 export default function UserRegisterPage() {
   const router = useRouter();

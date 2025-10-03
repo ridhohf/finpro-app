@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store/auth";
+import { useAuthStore } from "@/lib/store/auth.store";
 import { toast } from "sonner";
 
 // Decode JWT to get expiry time

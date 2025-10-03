@@ -1,4 +1,4 @@
-import type { User } from "../types/auth";
+import type { User } from "../types/auth.types";
 
 /**
  * Get the default redirect path based on user role

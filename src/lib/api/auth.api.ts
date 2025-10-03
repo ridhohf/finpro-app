@@ -9,7 +9,7 @@ import type {
   ConfirmResetPasswordData,
   UpdateProfileData,
   UpdatePasswordData,
-} from "../../types/auth";
+} from "../../types/auth.types";
 
 interface ApiResponse<T = any> {
   success: boolean;

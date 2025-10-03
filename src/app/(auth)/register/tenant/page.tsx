@@ -19,7 +19,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { authAPI } from "@/lib/api/auth";
+import { authAPI } from "@/lib/api/auth.api";
 
 export default function TenantRegisterPage() {
   const router = useRouter();

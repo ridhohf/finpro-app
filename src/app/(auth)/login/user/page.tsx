@@ -11,8 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { authAPI } from "@/lib/api/auth";
-import { useAuthStore } from "@/lib/store/auth";
+import { authAPI } from "@/lib/api/auth.api";
+import { useAuthStore } from "@/lib/store/auth.store";
 import { getRedirectUrl } from "@/lib/authRedirect";
 
 export default function UserLoginPage() {

@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store/auth";
+import { useAuthStore } from "@/lib/store/auth.store";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,7 +21,6 @@ import {
   User,
   LogOut,
   Settings,
-  Building2,
   Home,
   Calendar,
   LayoutDashboard,
@@ -55,10 +55,14 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Building2 className="h-6 w-6 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">
-              PropertyRent
-            </span>
+            <Image
+              src="/StayInn-logo.png"
+              alt="StayInn"
+              width={40}
+              height={40}
+              className="h-10 w-auto"
+            />
+            <span className="text-xl font-bold text-gray-900">StayInn</span>
           </Link>
 
           {/* Desktop Navigation */}

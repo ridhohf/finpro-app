@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { buildLoginUrl } from "@/lib/authRedirect";
-import { useAuthStore } from "@/lib/store/auth";
+import { useAuthStore } from "@/lib/store/auth.store";
 import { toast } from "sonner";
 
 interface UseRequireAuthOptions {
