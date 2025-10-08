@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { propertyAPI } from "@/lib/api/property.api";
 import type { Property } from "@/types/property.types";
+import { formatCurrency } from "@/lib/currency";
 
 export function FeaturedProperties() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -120,7 +121,7 @@ export function FeaturedProperties() {
                     <div>
                       <div className="text-sm text-gray-500">Starting from</div>
                       <div className="text-2xl font-bold text-blue-600">
-                        ${property.lowestPrice}
+                        {formatCurrency(property.lowestPrice)}
                         <span className="text-sm text-gray-500 font-normal">
                           /night
                         </span>

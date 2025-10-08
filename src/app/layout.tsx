@@ -1,9 +1,9 @@
-// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/components/auth/authProvider";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,12 +17,37 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
-        {/* Sonner Toast Notifications */}
-        <Toaster position="top-right" richColors closeButton duration={4000} />
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
+        {googleClientId ? (
+          <GoogleOAuthProvider clientId={googleClientId}>
+            <AuthProvider>{children}</AuthProvider>
+          </GoogleOAuthProvider>
+        ) : (
+          <AuthProvider>{children}</AuthProvider>
+        )}
+
+        {/* Toaster with maximum visibility */}
+        <Toaster 
+          position="top-center"
+          expand={true}
+          richColors 
+          closeButton
+          duration={5000}
+          style={{
+            zIndex: 999999,
+          }}
+          toastOptions={{
+            style: {
+              fontSize: '14px',
+              padding: '16px',
+            },
+            className: 'toast-custom',
+          }}
+        />
       </body>
     </html>
   );

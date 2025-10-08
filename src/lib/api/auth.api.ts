@@ -89,6 +89,13 @@ class AuthAPI {
     });
   }
 
+  async googleLogin(credential: string): Promise<AuthResponse> {
+    return this.request(API_ENDPOINTS.GOOGLE_LOGIN, {
+      method: "POST",
+      body: JSON.stringify({ credential }),
+    });
+  }
+
   async verifyEmail(data: VerifyEmailData): Promise<ApiResponse> {
     return this.request(API_ENDPOINTS.VERIFY_EMAIL, {
       method: "POST",
@@ -165,6 +172,8 @@ class AuthAPI {
       body: JSON.stringify(data),
     });
   }
+
+  
 }
 
 export const authAPI = new AuthAPI();
