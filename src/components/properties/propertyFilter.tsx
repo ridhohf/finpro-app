@@ -1,20 +1,21 @@
-"use client";
+// src/components/properties/PropertyFilters.tsx
+'use client';
 
-import { useEffect, useState } from "react";
-import { Search, MapPin, Calendar, Users, DollarSign, X } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from 'react';
+import { Search, MapPin, Calendar, Users, DollarSign, X } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { propertyAPI } from "@/lib/api/property.api";
-import { format } from "date-fns";
+} from '@/components/ui/select';
+import { propertyAPI } from '@/lib/api/property.api';
+import { format } from 'date-fns';
 
 interface PropertyFiltersProps {
   filters: {
@@ -31,11 +32,7 @@ interface PropertyFiltersProps {
   onSearch: () => void;
 }
 
-export function PropertyFilters({
-  filters,
-  onFilterChange,
-  onSearch,
-}: PropertyFiltersProps) {
+export function PropertyFilters({ filters, onFilterChange, onSearch }: PropertyFiltersProps) {
   const [cities, setCities] = useState<string[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
 
@@ -45,26 +42,28 @@ export function PropertyFilters({
 
   const loadFilterOptions = async () => {
     try {
-      const [citiesResponse] = await Promise.all([propertyAPI.getCities()]);
+      const [citiesResponse] = await Promise.all([
+        propertyAPI.getCities(),
+      ]);
 
       if (citiesResponse.data) {
         setCities(citiesResponse.data);
       }
     } catch (error) {
-      console.error("Failed to load filter options:", error);
+      console.error('Failed to load filter options:', error);
     }
   };
 
   const handleClearFilters = () => {
     onFilterChange({
-      city: "",
-      checkIn: "",
-      checkOut: "",
-      guests: "",
-      categoryId: "",
-      search: "",
-      minPrice: "",
-      maxPrice: "",
+      city: '',
+      checkIn: '',
+      checkOut: '',
+      guests: '',
+      categoryId: '',
+      search: '',
+      minPrice: '',
+      maxPrice: '',
     });
   };
 
@@ -78,7 +77,7 @@ export function PropertyFilters({
     filters.minPrice ||
     filters.maxPrice;
 
-  const today = format(new Date(), "yyyy-MM-dd");
+  const today = format(new Date(), 'yyyy-MM-dd');
 
   return (
     <Card className="p-6 sticky top-20">
@@ -119,10 +118,8 @@ export function PropertyFilters({
             City
           </Label>
           <Select
-            value={filters.city || "all"}
-            onValueChange={(value) =>
-              onFilterChange({ city: value === "all" ? "" : value })
-            }
+            value={filters.city}
+            onValueChange={(value) => onFilterChange({ city: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="All cities" />
@@ -175,10 +172,8 @@ export function PropertyFilters({
             Guests
           </Label>
           <Select
-            value={filters.guests || "any"}
-            onValueChange={(value) =>
-              onFilterChange({ guests: value === "any" ? "" : value })
-            }
+            value={filters.guests}
+            onValueChange={(value) => onFilterChange({ guests: value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="Any" />
@@ -187,7 +182,7 @@ export function PropertyFilters({
               <SelectItem value="any">Any</SelectItem>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                 <SelectItem key={num} value={num.toString()}>
-                  {num} {num === 1 ? "Guest" : "Guests"}
+                  {num} {num === 1 ? 'Guest' : 'Guests'}
                 </SelectItem>
               ))}
             </SelectContent>

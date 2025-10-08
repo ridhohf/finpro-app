@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
   SOCIAL_LOGIN: "/auth/social-login",
+  GOOGLE_LOGIN: "/auth/google-login",
   VERIFY_EMAIL: "/auth/verify-email",
   RESEND_VERIFICATION: "/auth/resend-verification",
   RESET_PASSWORD: "/auth/reset-password",
@@ -16,8 +17,8 @@ export const API_ENDPOINTS = {
   // Property Catalog (Public)
   PROPERTY_SEARCH: "/properties/search",
   PROPERTY_DETAIL: "/properties",
-  PROPERTY_CITIES: "/tenant/properties/cities",
-  ROOM_CALENDAR: "/properties/room",
+  PROPERTY_CITIES: "/properties/cities", // ✅ FIX: Ini public route!
+  ROOM_CALENDAR: "/properties/rooms",
 
   // Tenant - Categories
   TENANT_CATEGORIES: "/tenant/categories",
@@ -33,4 +34,7 @@ export const API_ENDPOINTS = {
 
   // Tenant - Peak Seasons
   TENANT_PEAK_SEASONS: "/tenant/peak-seasons",
+
+  // Tenant - Dashboard
+  TENANT_DASHBOARD: "/tenant/dashboard",
 } as const;

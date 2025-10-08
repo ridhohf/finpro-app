@@ -1,10 +1,11 @@
+// src/app/properties/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { PropertyFilters } from "@/components/properties/propertyFilters";
+import { PropertyFilters } from "@/components/properties/propertyFilter";
 import { PropertyCard } from "@/components/properties/propertyCard";
 import { PropertySort } from "@/components/properties/propertySort";
 import { Loader2, Search } from "lucide-react";

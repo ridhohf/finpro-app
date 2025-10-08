@@ -5,6 +5,7 @@ export interface User {
   role: "user" | "tenant";
   avatar?: string;
   isVerified: boolean;
+  provider?: string;
   tenantProfile?: {
     id: number;
     companyName: string;
