@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store/auth.store";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store/auth.store';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +13,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar } from "@/components/ui/avatar";
+} from '@/components/ui/dropdown-menu';
+import { Avatar } from '@/components/ui/avatar';
 import {
   Menu,
   X,
@@ -25,8 +25,11 @@ import {
   Calendar,
   LayoutDashboard,
   Package,
-} from "lucide-react";
-import { toast } from "sonner";
+  ShoppingCart,
+  BarChart3,
+  Building2,
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 export function Navbar() {
   const router = useRouter();
@@ -35,16 +38,16 @@ export function Navbar() {
 
   const handleLogout = () => {
     clearAuth();
-    toast.success("Logged out successfully");
-    router.push("/");
+    toast.success('Logged out successfully');
+    router.push('/');
     setIsMobileMenuOpen(false);
   };
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
       .slice(0, 2);
   };
@@ -70,7 +73,7 @@ export function Navbar() {
             {isAuthenticated ? (
               <>
                 {/* User Navigation */}
-                {user?.role === "user" && (
+                {user?.role === 'user' && (
                   <>
                     <Link
                       href="/properties"
@@ -79,7 +82,7 @@ export function Navbar() {
                       Browse Properties
                     </Link>
                     <Link
-                      href="/reservations"
+                      href="/user/transactions"
                       className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
                     >
                       My Bookings
@@ -88,7 +91,7 @@ export function Navbar() {
                 )}
 
                 {/* Tenant Navigation */}
-                {user?.role === "tenant" && (
+                {user?.role === 'tenant' && (
                   <>
                     <Link
                       href="/tenant/dashboard"
@@ -101,6 +104,18 @@ export function Navbar() {
                       className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
                     >
                       My Properties
+                    </Link>
+                    <Link
+                      href="/tenant/orders"
+                      className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+                    >
+                      Orders
+                    </Link>
+                    <Link
+                      href="/tenant/reports/sales"
+                      className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+                    >
+                      Reports
                     </Link>
                   </>
                 )}
@@ -121,7 +136,7 @@ export function Navbar() {
                           />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center bg-blue-600 text-sm font-medium text-white">
-                            {getInitials(user?.name || "U")}
+                            {getInitials(user?.name || 'U')}
                           </div>
                         )}
                       </Avatar>
@@ -138,7 +153,7 @@ export function Navbar() {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    {user?.role === "user" && (
+                    {user?.role === 'user' && (
                       <>
                         <DropdownMenuItem asChild>
                           <Link href="/profile" className="cursor-pointer">
@@ -147,14 +162,17 @@ export function Navbar() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                          <Link href="/reservations" className="cursor-pointer">
+                          <Link
+                            href="/user/transactions"
+                            className="cursor-pointer"
+                          >
                             <Calendar className="mr-2 h-4 w-4" />
                             My Bookings
                           </Link>
                         </DropdownMenuItem>
                       </>
                     )}
-                    {user?.role === "tenant" && (
+                    {user?.role === 'tenant' && (
                       <>
                         <DropdownMenuItem asChild>
                           <Link
@@ -172,6 +190,24 @@ export function Navbar() {
                           >
                             <Package className="mr-2 h-4 w-4" />
                             My Properties
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href="/tenant/orders"
+                            className="cursor-pointer"
+                          >
+                            <ShoppingCart className="mr-2 h-4 w-4" />
+                            Orders
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href="/tenant/reports/sales"
+                            className="cursor-pointer"
+                          >
+                            <BarChart3 className="mr-2 h-4 w-4" />
+                            Reports
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
@@ -243,7 +279,7 @@ export function Navbar() {
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center bg-blue-600 text-white font-medium">
-                          {getInitials(user?.name || "U")}
+                          {getInitials(user?.name || 'U')}
                         </div>
                       )}
                     </Avatar>
@@ -258,7 +294,7 @@ export function Navbar() {
                 </div>
 
                 {/* User Links */}
-                {user?.role === "user" && (
+                {user?.role === 'user' && (
                   <>
                     <Link
                       href="/properties"
@@ -268,7 +304,7 @@ export function Navbar() {
                       Browse Properties
                     </Link>
                     <Link
-                      href="/reservations"
+                      href="/user/transactions"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
                     >
@@ -285,7 +321,7 @@ export function Navbar() {
                 )}
 
                 {/* Tenant Links */}
-                {user?.role === "tenant" && (
+                {user?.role === 'tenant' && (
                   <>
                     <Link
                       href="/tenant/dashboard"
@@ -300,6 +336,27 @@ export function Navbar() {
                       className="block px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
                     >
                       My Properties
+                    </Link>
+                    <Link
+                      href="/tenant/orders"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                    >
+                      Orders
+                    </Link>
+                    <Link
+                      href="/tenant/reports/sales"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                    >
+                      Sales Report
+                    </Link>
+                    <Link
+                      href="/tenant/reports/properties"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                    >
+                      Availability Report
                     </Link>
                     <Link
                       href="/profile"
