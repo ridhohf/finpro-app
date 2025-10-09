@@ -1,4 +1,3 @@
-// src/app/(auth)/layout.tsx
 import { ReactNode } from "react";
 import { AuthGuard } from "@/components/auth/authGuard";
 

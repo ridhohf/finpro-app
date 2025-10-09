@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Star, MapPin, Loader2, ArrowRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Star, MapPin, Loader2, ArrowRight, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { propertyAPI } from "@/lib/api/property.api";
 import type { Property } from "@/types/property.types";
 import { formatCurrency } from "@/lib/currency";
@@ -38,10 +36,10 @@ export function FeaturedProperties() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
           </div>
         </div>
       </section>
@@ -49,95 +47,101 @@ export function FeaturedProperties() {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Featured Properties
+        <div className="text-center mb-14">
+          <div className="inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold mb-4">
+            ⭐ Featured
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Recommended Properties
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Handpicked properties from around the world
+            Handpicked stays recommended by our guests
           </p>
         </div>
 
         {/* Properties Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {properties.map((property) => (
             <Link
               key={property.id}
               href={`/properties/${property.id}`}
               className="group"
             >
-              <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+              <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 {/* Image */}
-                <div className="relative h-56 overflow-hidden bg-gray-200">
+                <div className="relative h-64 overflow-hidden">
                   {property.picture && property.picture.length > 0 ? (
                     <img
                       src={property.picture[0]}
                       alt={property.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
-                      <MapPin className="w-12 h-12 text-gray-400" />
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100">
+                      <Building2 className="w-16 h-16 text-gray-400" />
                     </div>
                   )}
 
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-white/90 text-gray-900 hover:bg-white">
+                    <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full shadow-lg">
                       {property.category.name}
-                    </Badge>
+                    </span>
                   </div>
 
-                  {/* Rating Badge */}
+                  {/* Rating */}
                   {property.averageRating > 0 && (
-                    <div className="absolute top-4 right-4 bg-blue-600 text-white px-2 py-1 rounded-lg flex items-center gap-1 text-sm font-semibold">
-                      <Star className="w-4 h-4 fill-current" />
-                      {property.averageRating.toFixed(1)}
+                    <div className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-yellow-400 text-gray-900 rounded-full shadow-lg">
+                      <Star className="w-3.5 h-3.5 fill-current" />
+                      <span className="text-sm font-bold">
+                        {property.averageRating.toFixed(1)}
+                      </span>
                     </div>
                   )}
                 </div>
 
                 {/* Content */}
-                <div className="p-5">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
                     {property.name}
                   </h3>
 
-                  <div className="flex items-center text-gray-600 mb-3">
-                    <MapPin className="w-4 h-4 mr-1" />
+                  <div className="flex items-center text-gray-500 mb-3">
+                    <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
                     <span className="text-sm line-clamp-1">
                       {property.city}
                     </span>
                   </div>
 
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
                     {property.description}
                   </p>
 
-                  <div className="flex items-center justify-between pt-4 border-t">
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                     <div>
-                      <div className="text-sm text-gray-500">Starting from</div>
-                      <div className="text-2xl font-bold text-blue-600">
-                        {formatCurrency(property.lowestPrice)}
-                        <span className="text-sm text-gray-500 font-normal">
-                          /night
+                      <div className="text-xs text-gray-500 mb-1">
+                        Starting from
+                      </div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-2xl font-bold text-gray-900">
+                          {formatCurrency(property.lowestPrice || 0)}
                         </span>
+                        <span className="text-sm text-gray-500">/night</span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm text-gray-500">
-                        {property.availableRooms} rooms
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {property.totalReviews} reviews
-                      </div>
+                    <div className="text-right text-xs text-gray-500">
+                      <div>{property.availableRooms} rooms</div>
+                      <div>{property.totalReviews} reviews</div>
                     </div>
                   </div>
                 </div>
-              </Card>
+              </div>
             </Link>
           ))}
         </div>
@@ -145,7 +149,10 @@ export function FeaturedProperties() {
         {/* View All Button */}
         <div className="text-center">
           <Link href="/properties">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl px-8 h-12 text-base shadow-lg hover:shadow-xl transition-all duration-300"
+            >
               View All Properties
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>

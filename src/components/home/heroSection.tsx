@@ -2,7 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, Calendar, Users, Loader2 } from "lucide-react";
+import {
+  Search,
+  MapPin,
+  Calendar,
+  Users,
+  Loader2,
+  Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { propertyAPI } from "@/lib/api/property.api";
 import { format } from "date-fns";
@@ -63,7 +69,6 @@ export function HeroSection() {
 
     setIsSearching(true);
 
-    // Build query params
     const params = new URLSearchParams({
       city: searchData.city,
       checkIn: searchData.checkIn,
@@ -71,47 +76,52 @@ export function HeroSection() {
       guests: searchData.guests,
     });
 
-    // Navigate to search results
     router.push(`/properties?${params.toString()}`);
   };
 
-  // Get today's date for min date
   const today = format(new Date(), "yyyy-MM-dd");
 
   return (
-    <div className="relative min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-400">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] animate-pulse"></div>
+    <div className="relative min-h-[650px] lg:min-h-[700px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800">
+      {/* Animated Background Pattern */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -inset-[10px] opacity-30">
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-            Find Your Perfect Stay
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        {/* Header */}
+        <div className="text-center mb-8 md:mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-white/90 text-sm mb-6">
+            <Sparkles className="w-4 h-4" />
+            <span>Book your dream vacation today</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
+            Find Your Perfect
+            <span className="block bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+              Stay
+            </span>
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
-            Discover amazing places to stay around the world
+
+          <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+            Discover amazing places around the world with the best prices
           </p>
         </div>
 
-        {/* Search Card */}
-        <Card className="max-w-5xl mx-auto p-6 md:p-8 shadow-2xl backdrop-blur-sm bg-white/95">
+        {/* Search Card - Modern Design */}
+        <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-8">
           <form onSubmit={handleSearch} className="space-y-6">
-            {/* Mobile: Stack vertically, Desktop: Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* City Selection */}
+              {/* City */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="city"
-                  className="flex items-center text-gray-700"
-                >
-                  <MapPin className="w-4 h-4 mr-1" />
-                  Where to?
+                <Label className="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                  <MapPin className="w-4 h-4 text-blue-600" />
+                  Destination
                 </Label>
                 <Select
                   value={searchData.city}
@@ -120,7 +130,7 @@ export function HeroSection() {
                   }
                   disabled={isLoadingCities}
                 >
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors rounded-xl">
                     <SelectValue
                       placeholder={
                         isLoadingCities ? "Loading..." : "Select city"
@@ -137,20 +147,16 @@ export function HeroSection() {
                 </Select>
               </div>
 
-              {/* Check-in Date */}
+              {/* Check-in */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="checkIn"
-                  className="flex items-center text-gray-700"
-                >
-                  <Calendar className="w-4 h-4 mr-1" />
+                <Label className="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                  <Calendar className="w-4 h-4 text-blue-600" />
                   Check-in
                 </Label>
                 <Input
-                  id="checkIn"
                   type="date"
                   min={today}
-                  className="h-12"
+                  className="h-12 border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors rounded-xl"
                   value={searchData.checkIn}
                   onChange={(e) =>
                     setSearchData({ ...searchData, checkIn: e.target.value })
@@ -159,20 +165,16 @@ export function HeroSection() {
                 />
               </div>
 
-              {/* Check-out Date */}
+              {/* Check-out */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="checkOut"
-                  className="flex items-center text-gray-700"
-                >
-                  <Calendar className="w-4 h-4 mr-1" />
+                <Label className="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                  <Calendar className="w-4 h-4 text-blue-600" />
                   Check-out
                 </Label>
                 <Input
-                  id="checkOut"
                   type="date"
                   min={searchData.checkIn || today}
-                  className="h-12"
+                  className="h-12 border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors rounded-xl"
                   value={searchData.checkOut}
                   onChange={(e) =>
                     setSearchData({ ...searchData, checkOut: e.target.value })
@@ -183,11 +185,8 @@ export function HeroSection() {
 
               {/* Guests */}
               <div className="space-y-2">
-                <Label
-                  htmlFor="guests"
-                  className="flex items-center text-gray-700"
-                >
-                  <Users className="w-4 h-4 mr-1" />
+                <Label className="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                  <Users className="w-4 h-4 text-blue-600" />
                   Guests
                 </Label>
                 <Select
@@ -196,7 +195,7 @@ export function HeroSection() {
                     setSearchData({ ...searchData, guests: value })
                   }
                 >
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-colors rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -214,7 +213,7 @@ export function HeroSection() {
             <Button
               type="submit"
               size="lg"
-              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg"
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={isSearching}
             >
               {isSearching ? (
@@ -230,10 +229,10 @@ export function HeroSection() {
               )}
             </Button>
           </form>
-        </Card>
+        </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-5xl mx-auto">
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-5xl mx-auto">
           {[
             { label: "Properties", value: "10,000+" },
             {
@@ -241,22 +240,49 @@ export function HeroSection() {
               value: cities.length > 0 ? `${cities.length}+` : "50+",
             },
             { label: "Happy Guests", value: "100K+" },
-            { label: "Countries", value: "25+" },
+            { label: "Reviews", value: "50K+" },
           ].map((stat) => (
             <div
               key={stat.label}
-              className="text-center text-white backdrop-blur-sm bg-white/10 rounded-lg p-4"
+              className="text-center bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 hover:bg-white/20 transition-colors"
             >
-              <div className="text-2xl md:text-3xl font-bold mb-1">
+              <div className="text-2xl md:text-4xl font-bold text-white mb-1">
                 {stat.value}
               </div>
-              <div className="text-sm md:text-base opacity-90">
+              <div className="text-sm md:text-base text-white/80">
                 {stat.label}
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Add animation keyframes */}
+      <style jsx>{`
+        @keyframes blob {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
     </div>
   );
 }

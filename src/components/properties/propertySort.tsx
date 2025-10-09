@@ -1,56 +1,51 @@
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+"use client";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
+import { ArrowUpDown } from "lucide-react";
 
 interface PropertySortProps {
-  sortBy: 'name' | 'price';
-  sortOrder: 'asc' | 'desc';
-  onSortChange: (sortBy: 'name' | 'price', sortOrder: 'asc' | 'desc') => void;
+  sortBy: "name" | "price";
+  sortOrder: "asc" | "desc";
+  onSortChange: (sortBy: "name" | "price", sortOrder: "asc" | "desc") => void;
 }
 
-export function PropertySort({ sortBy, sortOrder, onSortChange }: PropertySortProps) {
-  const sortOptions = [
-    { value: 'name-asc', label: 'Name (A-Z)', sortBy: 'name' as const, sortOrder: 'asc' as const },
-    { value: 'name-desc', label: 'Name (Z-A)', sortBy: 'name' as const, sortOrder: 'desc' as const },
-    { value: 'price-asc', label: 'Price (Low to High)', sortBy: 'price' as const, sortOrder: 'asc' as const },
-    { value: 'price-desc', label: 'Price (High to Low)', sortBy: 'price' as const, sortOrder: 'desc' as const },
-  ];
+export function PropertySort({
+  sortBy,
+  sortOrder,
+  onSortChange,
+}: PropertySortProps) {
+  const handleSortChange = (value: string) => {
+    const [newSortBy, newSortOrder] = value.split("-") as [
+      "name" | "price",
+      "asc" | "desc"
+    ];
+    onSortChange(newSortBy, newSortOrder);
+  };
 
   const currentValue = `${sortBy}-${sortOrder}`;
 
   return (
-    <div className="flex items-center gap-2">
-      <ArrowUpDown className="w-4 h-4 text-gray-500" />
-      <Select
-        value={currentValue}
-        onValueChange={(value) => {
-          const option = sortOptions.find((opt) => opt.value === value);
-          if (option) {
-            onSortChange(option.sortBy, option.sortOrder);
-          }
-        }}
-      >
-        <SelectTrigger className="w-[200px]">
+    <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 text-gray-700">
+        <ArrowUpDown className="w-4 h-4" />
+        <span className="text-sm font-semibold">Sort by:</span>
+      </div>
+
+      <Select value={currentValue} onValueChange={handleSortChange}>
+        <SelectTrigger className="w-48 h-10 border-2 border-gray-200 focus:border-blue-500 rounded-xl">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {sortOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              <div className="flex items-center gap-2">
-                {option.sortOrder === 'asc' ? (
-                  <ArrowUp className="w-4 h-4" />
-                ) : (
-                  <ArrowDown className="w-4 h-4" />
-                )}
-                {option.label}
-              </div>
-            </SelectItem>
-          ))}
+          <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+          <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+          <SelectItem value="price-asc">Price (Low to High)</SelectItem>
+          <SelectItem value="price-desc">Price (High to Low)</SelectItem>
         </SelectContent>
       </Select>
     </div>
