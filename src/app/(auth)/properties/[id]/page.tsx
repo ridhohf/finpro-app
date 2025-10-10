@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { ImageGallery } from "@/components/properties/imageGallery";
-import { RoomList } from "@/components/properties/roomList";
-import { PriceCalendar } from "@/components/properties/priceCalendar";
-import { ReviewsSection } from "@/components/properties/reviewSection";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from 'react';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import { Navbar } from '@/components/layout/navbar';
+import { Footer } from '@/components/layout/footer';
+import { ImageGallery } from '@/components/properties/imageGallery';
+import { RoomList } from '@/components/properties/roomList';
+import { PriceCalendar } from '@/components/properties/priceCalendar';
+import { ReviewsSection } from '@/components/properties/reviewSection';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Loader2,
   MapPin,
@@ -21,22 +21,26 @@ import {
   Share2,
   Heart,
   ArrowLeft,
-} from "lucide-react";
-import { propertyAPI } from "@/lib/api/property.api";
-import type { PropertyDetail } from "@/types/property.types";
-import { toast } from "sonner";
-import { formatCurrency } from "@/lib/currency";
+} from 'lucide-react';
+import { propertyAPI } from '@/lib/api/property.api';
+import { useAuthStore } from '@/lib/store/auth.store';
+import type { PropertyDetail, Room } from '@/types/property.types';
+import { toast } from 'sonner';
+import { formatCurrency } from '@/lib/currency';
 
 export default function PropertyDetailPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { isAuthenticated, user } = useAuthStore();
+
   const propertyId = parseInt(params.id as string);
 
   const [property, setProperty] = useState<PropertyDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDates, setSelectedDates] = useState({
-    checkIn: searchParams.get("checkIn") || "",
-    checkOut: searchParams.get("checkOut") || "",
+    checkIn: searchParams.get('checkIn') || '',
+    checkOut: searchParams.get('checkOut') || '',
   });
 
   useEffect(() => {
@@ -56,10 +60,42 @@ export default function PropertyDetailPage() {
         setProperty(response.data);
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to load property details");
+      toast.error(error.message || 'Failed to load property details');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBookNow = (room: Room) => {
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      toast.error('Silakan login terlebih dahulu');
+      router.push(`/login/user?redirect=/properties/${propertyId}`);
+      return;
+    }
+
+    // Check if user is verified
+    if (!user?.isVerified) {
+      toast.error('Email Anda belum terverifikasi');
+      router.push('/verify-email-required');
+      return;
+    }
+
+    // Check if user role is correct
+    if (user?.role !== 'user') {
+      toast.error('Hanya user yang dapat melakukan booking');
+      return;
+    }
+
+    // Check if dates are selected
+    if (!selectedDates.checkIn || !selectedDates.checkOut) {
+      toast.error('Pilih tanggal check-in dan check-out terlebih dahulu');
+      return;
+    }
+
+    // Navigate to booking page
+    const bookingUrl = `/properties/${propertyId}/book?roomId=${room.id}&checkIn=${selectedDates.checkIn}&checkOut=${selectedDates.checkOut}`;
+    router.push(bookingUrl);
   };
 
   if (isLoading) {
@@ -196,12 +232,74 @@ export default function PropertyDetailPage() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Available Rooms
                 </h2>
-                <RoomList
-                  rooms={property.rooms}
-                  checkIn={selectedDates.checkIn}
-                  checkOut={selectedDates.checkOut}
-                  propertyId={property.id}
-                />
+                <div className="space-y-6">
+                  {property.rooms.map((room) => (
+                    <div
+                      key={room.id}
+                      className="border-2 border-gray-200 rounded-2xl p-6 hover:border-blue-300 transition-all"
+                    >
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {/* Room Image */}
+                        {room.picture && room.picture.length > 0 && (
+                          <div className="w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-100 to-purple-100">
+                            <img
+                              src={room.picture[0]}
+                              alt={room.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+
+                        {/* Room Details */}
+                        <div className="flex-1 flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between mb-2">
+                              <h3 className="text-xl font-bold text-gray-900">
+                                {room.name}
+                              </h3>
+                              {room.isAvailable ? (
+                                <Badge className="bg-green-100 text-green-800 border-green-200">
+                                  Available
+                                </Badge>
+                              ) : (
+                                <Badge className="bg-red-100 text-red-800 border-red-200">
+                                  Not Available
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-gray-600 text-sm mb-4">
+                              {room.description}
+                            </p>
+                            <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                              <Users className="w-4 h-4" />
+                              <span>Max {room.maxGuests} guests</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-500 mb-1">
+                                Price per night
+                              </p>
+                              <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                {formatCurrency(
+                                  room.currentPrice || room.basePrice
+                                )}
+                              </p>
+                            </div>
+                            <Button
+                              onClick={() => handleBookNow(room)}
+                              disabled={!room.isAvailable}
+                              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl h-11 px-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {room.isAvailable ? 'Book Now' : 'Not Available'}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Price Calendar */}
@@ -259,6 +357,7 @@ export default function PropertyDetailPage() {
                             checkIn: e.target.value,
                           })
                         }
+                        min={new Date().toISOString().split('T')[0]}
                       />
                     </div>
 
@@ -277,16 +376,19 @@ export default function PropertyDetailPage() {
                             checkOut: e.target.value,
                           })
                         }
-                        min={selectedDates.checkIn}
+                        min={
+                          selectedDates.checkIn ||
+                          new Date().toISOString().split('T')[0]
+                        }
                       />
                     </div>
 
-                    <Button
-                      className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                      disabled
-                    >
-                      Booking Available in Feature 2
-                    </Button>
+                    <div className="pt-4 border-t border-gray-200">
+                      <p className="text-sm text-gray-600 text-center">
+                        Pilih tanggal dan klik "Book Now" pada kamar yang
+                        diinginkan
+                      </p>
+                    </div>
                   </div>
                 </div>
 
