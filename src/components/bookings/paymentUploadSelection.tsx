@@ -85,7 +85,8 @@ export function PaymentUploadSection({
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-700">Account Name</span>
             <span className="font-bold text-gray-900">
-              {booking.property.tenant.tenantProfile.companyName}
+              {booking?.property?.tenant?.tenantProfile?.companyName ||
+                "Property Owner"}
             </span>
           </div>
           <div className="flex items-center justify-between border-t border-blue-200 pt-2 mt-2">

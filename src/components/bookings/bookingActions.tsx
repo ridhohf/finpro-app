@@ -85,9 +85,9 @@ export function BookingActions({ booking, onCancel }: BookingActionsProps) {
           Contact the property for any questions
         </p>
 
-        {booking.property.tenant.tenantProfile.phone && (
+        {booking?.property?.tenant?.tenantProfile?.phone && (
           <a
-            href={`tel:${booking.property.tenant.tenantProfile.phone}`}
+            href={`tel:${booking?.property?.tenant?.tenantProfile?.phone || ''}`}
             className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
           >
             <span className="text-sm font-semibold">
