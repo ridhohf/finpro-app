@@ -93,8 +93,8 @@ class ReservationAPI {
 
     const queryString = params.toString();
     const url = queryString
-      ? `${API_BASE_URL}/transactions/tenant?${queryString}`
-      : `${API_BASE_URL}/transactions/tenant`;
+      ? `${API_BASE_URL}/transactions?${queryString}`
+      : `${API_BASE_URL}/transactions`;
 
     const response = await fetch(url, {
       headers: {
