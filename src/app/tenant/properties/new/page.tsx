@@ -1,31 +1,37 @@
 "use client";
 
 import { ProtectedRoute } from "@/components/auth/protectedRoute";
+import { CitySelector } from "@/components/tenant/citySelector";
+import { AddressAutocomplete } from "@/components/tenant/open-cage/addressAuto";
+import { CoordinatePicker } from "@/components/tenant/open-cage/coordinatePicker";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { propertyAPI } from "@/lib/api/property.api";
 import { tenantAPI } from "@/lib/api/tenant.api";
 import { useAuthStore } from "@/lib/store/auth.store";
-import {
-    ArrowLeft,
-    Loader2,
-    MapPin,
-    Upload,
-    X
-} from "lucide-react";
+import { ArrowLeft, Loader2, MapPin, Upload, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
+interface PropertyFormData {
+  categoryId: string;
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  lat: string;
+  lng: string;
+}
 
 export default function PropertyFormPage() {
   const router = useRouter();
@@ -38,22 +44,22 @@ export default function PropertyFormPage() {
   const [isLoading, setIsLoading] = useState(isEditMode);
   const [isSaving, setIsSaving] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
-  const [cities, setCities] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PropertyFormData>({
     categoryId: "",
     name: "",
     description: "",
     address: "",
     city: "",
+    lat: "",
+    lng: "",
   });
 
   useEffect(() => {
     loadCategories();
-    loadCities();
     if (isEditMode && propertyId) {
       loadPropertyData();
     }
@@ -70,17 +76,6 @@ export default function PropertyFormPage() {
     }
   };
 
-  const loadCities = async () => {
-    try {
-      const response = await propertyAPI.getCities();
-      if (response.data) {
-        setCities(response.data);
-      }
-    } catch (error: any) {
-      toast.error("Failed to load cities");
-    }
-  };
-
   const loadPropertyData = async () => {
     setIsLoading(true);
     try {
@@ -93,6 +88,8 @@ export default function PropertyFormPage() {
           description: property.description,
           address: property.address,
           city: property.city,
+          lat: property.lat?.toString() || "",
+          lng: property.lng?.toString() || "",
         });
         setExistingImages(property.picture || []);
       }
@@ -182,6 +179,8 @@ export default function PropertyFormPage() {
         description: formData.description,
         address: formData.address,
         city: formData.city,
+        lat: formData.lat ? parseFloat(formData.lat) : undefined,
+        lng: formData.lng ? parseFloat(formData.lng) : undefined,
       };
 
       if (isEditMode && propertyId) {
@@ -323,61 +322,64 @@ export default function PropertyFormPage() {
 
           {/* Location */}
           <Card className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Location
-            </h2>
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-purple-600" />
+                Location Details
+              </h2>
+              <p className="text-sm text-gray-600">
+                Use address search or enter coordinates manually
+              </p>
+            </div>
 
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="city">City *</Label>
-                {cities.length > 0 ? (
-                  <Select
-                    value={formData.city}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, city: value })
-                    }
-                    required
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select city" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <Input
-                    id="city"
-                    placeholder="e.g., Jakarta"
-                    value={formData.city}
-                    onChange={(e) =>
-                      setFormData({ ...formData, city: e.target.value })
-                    }
-                    required
-                  />
-                )}
-              </div>
+              {/* Address Autocomplete with OpenCage */}
+              <AddressAutocomplete
+                value={formData.address}
+                onChange={(value) =>
+                  setFormData({ ...formData, address: value })
+                }
+                onLocationSelect={(location) => {
+                  setFormData({
+                    ...formData,
+                    address: location.address,
+                    city: location.city,
+                    lat: location.lat.toString(),
+                    lng: location.lng.toString(),
+                  });
+                }}
+                required
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="address">Full Address *</Label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Textarea
-                    id="address"
-                    placeholder="Street address, district, etc."
-                    className="pl-10 resize-none"
-                    value={formData.address}
-                    onChange={(e) =>
-                      setFormData({ ...formData, address: e.target.value })
-                    }
-                    required
-                    rows={3}
-                  />
-                </div>
+              {/* City Selector */}
+              <CitySelector
+                value={formData.city}
+                onChange={(value) => setFormData({ ...formData, city: value })}
+                required
+              />
+
+              {/* Coordinate Picker */}
+              <div className="pt-4 border-t border-gray-200">
+                <h3 className="text-base font-semibold text-gray-900 mb-4">
+                  Coordinates (Optional)
+                </h3>
+                <CoordinatePicker
+                  lat={formData.lat}
+                  lng={formData.lng}
+                  onLatChange={(value) =>
+                    setFormData({ ...formData, lat: value })
+                  }
+                  onLngChange={(value) =>
+                    setFormData({ ...formData, lng: value })
+                  }
+                  onAddressFound={(address, city) => {
+                    setFormData({
+                      ...formData,
+                      address,
+                      city,
+                    });
+                  }}
+                />
               </div>
             </div>
           </Card>
@@ -411,7 +413,7 @@ export default function PropertyFormPage() {
                         <X className="w-4 h-4 text-white" />
                       </button>
                       {index === 0 && (
-                        <div className="absolute bottom-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                        <div className="absolute bottom-2 left-2 bg-purple-600 text-white text-xs px-2 py-1 rounded">
                           Cover
                         </div>
                       )}

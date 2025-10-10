@@ -72,13 +72,11 @@ export default function TenantLayout({ children }: { children: ReactNode }) {
       name: "Bookings",
       href: "/tenant/bookings",
       icon: Calendar,
-      badge: "Soon",
     },
     {
       name: "Reports",
       href: "/tenant/reports",
       icon: BarChart3,
-      badge: "Soon",
     },
   ];
 
@@ -212,11 +210,6 @@ export default function TenantLayout({ children }: { children: ReactNode }) {
                     <Icon className="w-5 h-5 mr-3" />
                     {item.name}
                   </div>
-                  {item.badge && (
-                    <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
                 </Link>
               );
             })}
@@ -279,11 +272,6 @@ export default function TenantLayout({ children }: { children: ReactNode }) {
                         <Icon className="w-5 h-5 mr-3" />
                         {item.name}
                       </div>
-                      {item.badge && (
-                        <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
                     </Link>
                   );
                 })}

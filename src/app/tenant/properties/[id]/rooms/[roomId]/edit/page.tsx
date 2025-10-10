@@ -234,14 +234,14 @@ export default function EditRoomPage() {
                   <Input
                     id="basePrice"
                     type="number"
-                    placeholder="e.g., 500000"
+                    placeholder="500000"
                     value={formData.basePrice}
                     onChange={(e) =>
                       setFormData({ ...formData, basePrice: e.target.value })
                     }
+                    className="h-12 text-base border-2 border-gray-200 focus:border-blue-500 rounded-xl pl-12"
+                    min="0"
                     required
-                    min="1"
-                    step="1000"
                   />
                   <p className="text-xs text-gray-500">
                     Price per night before peak season adjustments

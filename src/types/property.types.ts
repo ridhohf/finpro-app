@@ -103,3 +103,16 @@ export interface PriceCalendar {
     isAvailable: boolean;
   }[];
 }
+
+export interface FormData {
+  categoryId: string;
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  lat: string;
+  lng: string;
+}
+
+
+

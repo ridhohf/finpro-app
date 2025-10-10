@@ -1,3 +1,4 @@
+// ✅ CORRECT - Read from environment variable
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -17,7 +18,7 @@ export const API_ENDPOINTS = {
   // Property Catalog (Public)
   PROPERTY_SEARCH: "/properties/search",
   PROPERTY_DETAIL: "/properties",
-  PROPERTY_CITIES: "/properties/cities", // ✅ FIX: Ini public route!
+  PROPERTY_CITIES: "/properties/cities",
   ROOM_CALENDAR: "/properties/rooms",
 
   // Tenant - Categories
@@ -37,4 +38,9 @@ export const API_ENDPOINTS = {
 
   // Tenant - Dashboard
   TENANT_DASHBOARD: "/tenant/dashboard",
+
+  // Transactions
+  TRANSACTIONS: "/transactions",
+  TRANSACTIONS_USER: "/transactions/user",
+  TRANSACTIONS_TENANT: "/transactions/tenant",
 } as const;

@@ -1,6 +1,3 @@
-// src/lib/store/auth.store.ts
-// Updated with cookie support for middleware
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { User } from "../../types/auth.types";

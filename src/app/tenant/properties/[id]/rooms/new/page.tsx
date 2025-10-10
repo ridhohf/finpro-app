@@ -189,21 +189,31 @@ export default function CreateRoomPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="basePrice">Base Price (IDR) *</Label>
-                  <Input
-                    id="basePrice"
-                    type="number"
-                    placeholder="e.g., 500000"
-                    value={formData.basePrice}
-                    onChange={(e) =>
-                      setFormData({ ...formData, basePrice: e.target.value })
-                    }
-                    required
-                    min="1"
-                    step="1000"
-                  />
-                  <p className="text-xs text-gray-500">
-                    Price per night before peak season adjustments
+                  <Label
+                    htmlFor="basePrice"
+                    className="text-base font-semibold text-gray-700"
+                  >
+                    Base Price (per night) *
+                  </Label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                      Rp
+                    </span>
+                    <Input
+                      id="basePrice"
+                      type="number"
+                      placeholder="500000"
+                      value={formData.basePrice}
+                      onChange={(e) =>
+                        setFormData({ ...formData, basePrice: e.target.value })
+                      }
+                      className="h-12 text-base border-2 border-gray-200 focus:border-blue-500 rounded-xl pl-12"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    Minimum price per night for this room
                   </p>
                 </div>
 
